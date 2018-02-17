@@ -1,5 +1,6 @@
 import React, { Component}  from 'react';
 
+import { Link } from "react-router-dom";
 
 import CMPBookShelf from "./CMPBookShelf";
 
@@ -57,9 +58,9 @@ class CMPBookList extends   Component{
 
                 </div>
             </div>
-            <div className="open-search">
-                <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
-            </div>
+                <div className="open-search">
+                    <Link to="/search">Add a book</Link>
+                </div>
         </div>
         );
     }

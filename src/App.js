@@ -20,22 +20,19 @@ class BooksApp extends React.Component {
                 books: data
             });
         });
-    }
-
-    handleChanges = (book: any, shelf: string) => {
-        BooksAPI.update(book, shelf).then(response => {
-            this.getBooks();
-        });
     };
 
-    getBooks() {
-        BooksAPI.getAll().then(data => {
 
+
+    handleChangeShelf = (books: any) => {
+        BooksAPI.getAll().then(data => {
             this.setState({
                 books: data
             });
         });
-    }
+
+
+    };
 
     render() {
         return (
@@ -44,7 +41,7 @@ class BooksApp extends React.Component {
                 <Route
                     path="/search"
                     render={() =>
-                        <SearchPage onChangeShelf={this.handleChanges} booksOnShelf={this.state.books} />}
+                        <SearchPage onChangeShelf={this.handleChangeShelf} booksOnShelf={this.state.books} />}
                 />
 
             </div>

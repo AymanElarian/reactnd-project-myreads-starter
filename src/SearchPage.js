@@ -65,6 +65,16 @@ class SearchPage extends React.Component {
     }
 
 
+    handleChangeShelf = (books: any) => {
+        this.setState({
+            books: books
+        });
+
+        this.props.onChangeShelf(books);
+
+    };
+
+
 
 
 
@@ -87,6 +97,8 @@ class SearchPage extends React.Component {
                 <div className="search-books-results">
                     <CMPBook
                         books={this.state.books}
+                        onChangeShelf={this.handleChangeShelf}
+
                     />
 
                 </div>
