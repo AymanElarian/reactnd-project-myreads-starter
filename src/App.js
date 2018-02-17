@@ -1,17 +1,12 @@
 import React from 'react'
 import { Route } from "react-router-dom";
 import CMPBookList from "./CMPBookList";
+import SearchPage from "./SearchPage";
 import * as BooksAPI from "./BooksAPI";
 
 import './App.css'
 
-/*
- <Route
-                path="/search"
-                render={() =>
-                    <SearchPage onChangeShelf={this.handleChanges} booksOnShelf={this.state.books} />}
-            />
- */
+
 
 class BooksApp extends React.Component {
 
@@ -35,6 +30,7 @@ class BooksApp extends React.Component {
 
     getBooks() {
         BooksAPI.getAll().then(data => {
+
             this.setState({
                 books: data
             });
@@ -45,6 +41,11 @@ class BooksApp extends React.Component {
         return (
             <div className="app">
                 <Route exact path="/" render={() => <CMPBookList booksOnShelf={this.state.books} />} />
+                <Route
+                    path="/search"
+                    render={() =>
+                        <SearchPage onChangeShelf={this.handleChanges} booksOnShelf={this.state.books} />}
+                />
 
             </div>
         );

@@ -1,24 +1,28 @@
 import React, { Component}  from 'react';
 
 
-import CMPBook from "./CMPBook";
+import CMPBookShelf from "./CMPBookShelf";
 
-import * as BooksAPI from "./BooksAPI";
 import "./App.css";
 
 class CMPBookList extends   Component{
-    state={};
-
-    handleChangeShelf = (bookId: string, e: any) => {
-        let temp = this.props.booksOnShelf;
-        const book = temp.filter(t => t.id === bookId)[0];
-        book.shelf = e.target.value;
-        BooksAPI.update(book, e.target.value).then(response => {
-            this.setState({
-                books: temp
-            });
-        });
+    state={
+        booksOnShelf:this.props.booksOnShelf
     };
+
+
+    componentWillReceiveProps(nextProps){
+        this.setState({booksOnShelf: nextProps.booksOnShelf})
+    }
+
+    handleChangeShelf = (books: any) => {
+        this.setState({
+            books: books
+        });
+
+    };
+
+
 
     render(){
         return (
@@ -30,21 +34,21 @@ class CMPBookList extends   Component{
             <div className="list-books-content">
                 <div>
 
-                    <CMPBook
+                    <CMPBookShelf
                         key="currently"
-                        books={this.props.booksOnShelf.filter(book => book.shelf === "currentlyReading")}
+                        books={this.state.booksOnShelf.filter(book => book.shelf === "currentlyReading")}
                         onChangeShelf={this.handleChangeShelf}
                         title="Currently Reading"
                     />
-                    <CMPBook
+                    <CMPBookShelf
                         key="wantToRead"
-                        books={this.props.booksOnShelf.filter(book => book.shelf === "wantToRead")}
+                        books={this.state.booksOnShelf.filter(book => book.shelf === "wantToRead")}
                         onChangeShelf={this.handleChangeShelf}
                         title="Want to Read"
                     />
-                    <CMPBook
+                    <CMPBookShelf
                         key="read"
-                        books={this.props.booksOnShelf.filter(book => book.shelf === "read")}
+                        books={this.state.booksOnShelf.filter(book => book.shelf === "read")}
                         onChangeShelf={this.handleChangeShelf}
                         title="Read"
                     />

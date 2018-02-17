@@ -1,31 +1,65 @@
 import React, { Component}  from 'react';
+import * as BooksAPI from "./BooksAPI";
 
 
-class CMPBook  extends Component {
+class CMPBook extends Component {
 
 
-    state={};
+    state={
+        books:this.props.books
+    };
+
+
+    componentWillReceiveProps(nextProps){
+        this.setState({books: nextProps.books})
+    }
+
+
+    updateBook(book: any, shelf: string) {
+        book.shelf = shelf;
+
+        let temp = this.state.books;
+        const bookToUpdate = temp.filter(t => t.id === book.id)[0];
+        bookToUpdate.shelf = shelf;
+        BooksAPI.update(bookToUpdate, shelf).then(response => {
+            this.setState({
+                books: temp
+            });
+            this.props.onChangeShelf(temp);
+        });
+
+
+        //this.props.onChangeShelf(book, shelf);
+
+
+    }
+
+
 
     render(){
 
+
         return (
 
-            <div className="bookshelf">
-                <h2 className="bookshelf-title">{this.props.title}</h2>
-                <div className="bookshelf-books">
+
                     <ol className="books-grid">
 
-                        {this.props.books.map(book =>
+                        {this.state.books.map(book =>
 
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
                                         <div className="book-cover" style={{  width: 128,
                                                 height: 193,
-                                                backgroundImage: 'url(" + book.imageLinks.thumbnail + ")'
+                                                backgroundImage: 'url(" '+ book.imageLinks.thumbnail + '")'
                                             }}></div>
                                         <div className="book-shelf-changer">
-                                            <select>
+                                            <select
+                                                value={book.shelf}
+                                                onChange={e => {
+                                                    this.updateBook(book, e.target.value);
+                                                }}
+                                            >
                                                 <option value="none" disabled>Move to...</option>
                                                 <option value="currentlyReading">Currently Reading</option>
                                                 <option value="wantToRead">Want to Read</option>
@@ -35,7 +69,7 @@ class CMPBook  extends Component {
                                         </div>
                                     </div>
                                     <div className="book-title">{book.title}</div>
-                                    <div className="book-authors">{book.authors[0]}</div>
+                                    <div className="book-authors">{Array.isArray(book.authors)?book.authors.join(", "):book.authors}</div>
                                 </div>
                             </li>
 
@@ -45,8 +79,7 @@ class CMPBook  extends Component {
 
 
                     </ol>
-                </div>
-            </div>
+
 
 
         );
