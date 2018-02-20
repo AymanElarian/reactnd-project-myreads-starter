@@ -2,6 +2,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import CMPBook from "./CMPBook";
+import { Debounce } from 'react-throttle';
+
 
 
 import * as BooksAPI from "./BooksAPI";
@@ -52,6 +54,12 @@ class SearchPage extends React.Component {
     updateBooks(books: any) {
         const UpdatedBooks = books.map(book => {
             book.shelf = "none";
+
+            if (typeof book.imageLinks === 'undefined') {
+                book.imageLinks={};
+               book.imageLinks.thumbnail='https://png.icons8.com/ios/1600/no-camera.png';
+
+            }
             this.props.booksOnShelf.forEach(bookOnShelf => {
                 if (book.id === bookOnShelf.id) {
                     book.shelf = bookOnShelf.shelf;
@@ -86,12 +94,16 @@ class SearchPage extends React.Component {
                         Close
                     </Link>
                     <div className="search-books-input-wrapper">
-                        <input
-                            type="text"
-                            placeholder="Search by title or author"
-                            value={this.state.keyword}
-                            onChange={event => this.DoSearch(event.target.value)}
-                        />
+                        <Debounce time="400" handler="onChange">
+                            <input
+                                type="text"
+                                placeholder="Search by title or author"
+                                onChange={event => this.DoSearch(event.target.value)}
+                            />
+                        </Debounce>
+
+
+
                     </div>
                 </div>
                 <div className="search-books-results">
